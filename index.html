@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>VoIP Confiável - Número de 8 dígitos</title>
+<!-- PeerJS com fallback para servidor alternativo -->
+<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
+}
+
+body {
+background: linear-gradient(145deg, #10131c 0%, #1a1f2c 100%);
+min-height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+padding: 1.5rem;
+}
+
+.app-container {
+max-width: 620px;
+width: 100%;
+background: rgba(22, 26, 35, 0.85);
+backdrop-filter: blur(12px);
+border-radius: 3rem;
+box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
+padding: 1.8rem 1.8rem 2rem;
+}
+
+h1 {
+font-size: 1.8rem;
+font-weight: 600;
+background: linear-gradient(135deg, #E0E7FF, #A5B4FC);
+-webkit-background-clip: text;
+background-clip: text;
+color: transparent;
+text-align: center;
+margin-bottom: 0.3rem;
+}
+
+.sub {
+text-align: center;
+color: #8b9bcf;
+font-size: 0.8rem;
+margin-bottom: 2rem;
+border-bottom: 1px dashed #2d3748;
+padding-bottom: 0.8rem;
+}
+
+.card {
+background: rgba(15, 19, 28, 0.7);
+border-radius: 2rem;
+padding: 1.4rem;
+margin-bottom: 1.5rem;
+border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.section-title {
+font-size: 1rem;
+font-weight: 600;
+color: #cbd5ff;
+margin-bottom: 1rem;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.input-group {
+display: flex;
+flex-wrap: wrap;
+gap: 12px;
+align-items: center;
+}
+
+input {
+flex: 2;
+background: #0f111a;
+border: 1px solid #2a2f3f;
+padding: 0.9rem 1.2rem;
+border-radius: 2rem;
+font-size: 1rem;
+color: #f0f3ff;
+font-weight: 500;
+outline: none;
+}
+
+input:focus {
+border-color: #6c8eff;
+box-shadow: 0 0 0 3px rgba(108, 142, 255, 0.2);
+}
+
+button {
+background: #2d3a5e;
+border: none;
+padding: 0.8rem 1.4rem;
+border-radius: 2rem;
+font-weight: 600;
+font-size: 0.9rem;
+color: white;
+cursor: pointer;
+transition: 0.2s;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+}
+
+button.primary { background: #4f46e5; box-shadow: 0 5px 12px rgba(79, 70, 229, 0.3); }
+button.primary:hover { background: #6366f1; transform: translateY(-2px); }
+button.danger { background: #b91c1c; }
+button.danger:hover { background: #dc2626; }
+button.success { background: #0e7b4e; }
+button.warning { background: #d97706; }
+
+.status-badge {
+background: #1e2436;
+border-radius: 2rem;
+padding: 0.4rem 1rem;
+font-size: 0.8rem;
+display: inline-flex;
+align-items: center;
+gap: 8px;
+color: #b9c3e6;
+margin-top: 12px;
+}
+
+.my-number-area {
+display: flex;
+justify-content: space-between;
+align-items: center;
+flex-wrap: wrap;
+gap: 12px;
+margin-top: 10px;
+}
+
+.badge-number {
+background: #00000040;
+padding: 0.5rem 1rem;
+border-radius: 2rem;
+font-family: monospace;
+font-size: 1.3rem;
+font-weight: bold;
+color: #a5f3c3;
+letter-spacing: 2px;
+}
+
+.call-controls {
+display: flex;
+gap: 12px;
+margin-top: 15px;
+flex-wrap: wrap;
+}
+
+.incoming-panel {
+background: #2a1e3c;
+border-left: 6px solid #fbbf24;
+padding: 1rem;
+border-radius: 1.5rem;
+margin: 12px 0;
+}
+
+.log-area {
+background: #0a0c14;
+border-radius: 1.5rem;
+padding: 0.8rem;
+max-height: 200px;
+overflow-y: auto;
+font-family: monospace;
+font-size: 0.75rem;
+color: #9ca3cf;
+}
+
+.log-entry {
+border-bottom: 1px solid #1e2538;
+padding: 6px 4px;
+}
+
+.flex-row {
+display: flex;
+justify-content: space-between;
+align-items: center;
+gap: 12px;
+flex-wrap: wrap;
+}
+
+footer {
+font-size: 0.7rem;
+text-align: center;
+color: #6f7c9f;
+margin-top: 20px;
+}
+@media (max-width: 500px) {
+.app-container { padding: 1.2rem; }
+button { padding: 0.7rem 1.1rem; }
+}
+</style>
+</head>
+<body>
+<div class="app-container" id="appRoot">
+<h1>📞 VoIP Confiável</h1>
+<div class="sub">Chamadas P2P · Número pessoal de 8 dígitos</div>
+
+<!-- SEÇÃO REGISTRO -->
+<div class="card">
+<div class="section-title"><span>📇</span> Meu número VoIP</div>
+<div class="input-group">
+<input type="text" id="myNumberInput" placeholder="Ex: 12345678" maxlength="8" inputmode="numeric">
+<button id="randomBtn" class="warning">🎲 Aleatório</button>
+<button id="registerBtn" class="primary">🔗 Registrar</button>
+</div>
+<div id="registrationStatus" class="status-badge">⚪ Não registrado</div>
+<div id="myNumberDisplayArea" style="display: none;" class="my-number-area">
+<span>🔔 Número ativo:</span>
+<span id="activeNumberSpan" class="badge-number">--------</span>
+</div>
+</div>
+
+<!-- SEÇÃO LIGAR -->
+<div class="card">
+<div class="section-title"><span>📞</span> Ligar para outro número</div>
+<div class="input-group">
+<input type="text" id="targetNumberInput" placeholder="Número destino (8 dígitos)" maxlength="8" inputmode="numeric">
+<button id="callBtn" class="primary">📞 Ligar</button>
+</div>
+<div id="callActions" style="display: none;" class="call-controls">
+<button id="hangupBtn" class="danger">❌ Desligar</button>
+<button id="muteMicBtn" class="warning">🎤 Mutar</button>
+</div>
+<div id="callStatusText" style="font-size: 0.8rem; margin-top: 12px; color: #b9c2e6;"></div>
+</div>
+
+<!-- NOTIFICAÇÃO DE CHAMADA RECEBIDA -->
+<div id="incomingContainer" style="display: none;">
+<div class="incoming-panel" id="incomingPanel">
+<div class="flex-row">
+<span>📳 Chamada recebida de:</span>
+<strong id="callerIdLabel" style="color:#ffd966;">XXXXXXXX</strong>
+</div>
+<div style="display: flex; gap: 12px; margin-top: 12px;">
+<button id="acceptCallBtn" class="success">✅ Atender</button>
+<button id="rejectCallBtn" class="danger">❌ Recusar</button>
+</div>
+</div>
+</div>
+
+<!-- LOG DE EVENTOS -->
+<div class="card">
+<div class="section-title"><span>📋</span> Eventos do sistema</div>
+<div id="logList" class="log-area">
+<div class="log-entry">📡 Pronto. Registre um número de 8 dígitos.</div>
+</div>
+</div>
+<footer>🔁 Se o número escolhido falhar, o sistema tentará um número aleatório disponível automaticamente.</footer>
+</div>
+
+<script>
+// -------------------- DOM --------------------
+const myNumberInput = document.getElementById('myNumberInput');
+const randomBtn = document.getElementById('randomBtn');
+const registerBtn = document.getElementById('registerBtn');
+const registrationStatusDiv = document.getElementById('registrationStatus');
+const myNumberDisplayArea = document.getElementById('myNumberDisplayArea');
+const activeNumberSpan = document.getElementById('activeNumberSpan');
+const targetNumberInput = document.getElementById('targetNumberInput');
+const callBtn = document.getElementById('callBtn');
+const hangupBtn = document.getElementById('hangupBtn');
+const muteMicBtn = document.getElementById('muteMicBtn');
+const callStatusText = document.getElementById('callStatusText');
+const incomingContainer = document.getElementById('incomingContainer');
+const callerIdLabel = document.getElementById('callerIdLabel');
+const acceptCallBtn = document.getElementById('acceptCallBtn');
+const rejectCallBtn = document.getElementById('rejectCallBtn');
+const logList = document.getElementById('logList');
+
+// -------------------- Estado Global --------------------
+let peer = null;
+let currentCall = null;
+let localStream = null;
+let isMicMuted = false;
+let myRegisteredNumber = null;
+let incomingCallRequest = null;
+let isInCall = false;
+
+// Helpers
+function addLog(msg, type = "info") {
+const logDiv = document.createElement('div');
+logDiv.className = 'log-entry';
+const time = new Date().toLocaleTimeString('pt-BR');
+logDiv.innerHTML = [${time}] ${msg};
+if (type === 'error') logDiv.style.color = '#ffa4a4';
+else if (type === 'success') logDiv.style.color = '#b9f5d8';
+else logDiv.style.color = '#b9c2e6';
+logList.appendChild(logDiv);
+logDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+if (logList.children.length > 50) logList.removeChild(logList.children[0]);
+}
+
+async function resetCallUI() {
+if (currentCall) {
+try { currentCall.close(); } catch(e) {}
+currentCall = null;
+}
+if (localStream) {
+localStream.getTracks().forEach(track => track.stop());
+localStream = null;
+}
+isInCall = false;
+isMicMuted = false;
+if (muteMicBtn) muteMicBtn.innerHTML = '🎤 Mutar';
+if (callStatusText) callStatusText.innerText = '';
+const callActionsDiv = document.getElementById('callActions');
+if (callActionsDiv) callActionsDiv.style.display = 'none';
+detachRemoteAudio();
+hideIncomingPanel();
+if (incomingCallRequest) {
+try { incomingCallRequest.close(); } catch(e) {}
+incomingCallRequest = null;
+}
+}
+
+function detachRemoteAudio() {
+const audioEl = document.getElementById('remoteAudioElement');
+if (audioEl && audioEl.srcObject) {
+audioEl.srcObject.getTracks().forEach(t => t.stop());
+audioEl.srcObject = null;
+}
+}
+
+function attachRemoteAudio(stream) {
+let audioElement = document.getElementById('remoteAudioElement');
+if (!audioElement) {
+audioElement = document.createElement('audio');
+audioElement.id = 'remoteAudioElement';
+audioElement.autoplay = true;
+audioElement.style.display = 'none';
+document.body.appendChild(audioElement);
+}
+audioElement.srcObject = stream;
+audioElement.play().catch(e => addLog("Erro ao reproduzir áudio: " + e.message, "error"));
+}
+
+function hideIncomingPanel() {
+incomingContainer.style.display = 'none';
+incomingCallRequest = null;
+}
+
+async function getLocalUserMedia() {
+try {
+const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+return stream;
+} catch (err) {
+addLog(❌ Microfone inacessível: ${err.message}`, "error");
+throw err;
+}
+}
+
+function setupCallHandlers(call, remoteId) {
+call.on('stream', (remoteStream) => {
+addLog(🔊 Áudio conectado com${remoteId}, "success"); attachRemoteAudio(remoteStream); callStatusText.innerText =🎙️ Em chamada com latex
+{remoteId}`; isInCall = true; document.getElementById('callActions').style.display = 'flex'; }); call.on('close', () =&gt; { addLog(`📴 Chamada encerrada com 
+
+{remoteId}, "info"); resetCallUI(); callStatusText.innerText = "Chamada finalizada"; }); call.on('error', (err) =&gt; { addLog(Erro na chamada com {err.message || err}`, "error");
+resetCallUI();
+});
+}
+
+async function makeCall(targetNumber) {
+if (!peer || !myRegisteredNumber) {
+addLog("Registre seu número antes de ligar.", "error");
+return;
+}
+if (targetNumber === myRegisteredNumber) {
+addLog("Não pode ligar para si mesmo.", "error");
+return;
+}
+if (!/^\d{8}{targetNumber}..., "info"); callStatusText.innerText =📳 Ligando para latex
+{targetNumber}...`; const call = peer.call(targetNumber, stream); currentCall = call; setupCallHandlers(call, targetNumber); call.on('error', (err) =&gt; { addLog(`Falha ao chamar 
+
+{targetNumber}: {targetNumber} offline`;
+});
+}
+
+async function acceptIncoming() {
+if (!incomingCallRequest) return;
+const call = incomingCallRequest;
+const callerId = callerIdLabel.innerText;
+if (isInCall) {
+addLog(Ocupado, recusando chamada de ${callerId}, "error"); call.close(); hideIncomingPanel(); return; } let stream; try { stream = await getLocalUserMedia(); localStream = stream; } catch(e) { call.close(); hideIncomingPanel(); return; } addLog(📞 Atendendo ${callerId}..., "success");
+call.answer(stream);
+currentCall = call;
+setupCallHandlers(call, callerId);
+hideIncomingPanel();
+callStatusText.innerText = Em chamada com ${callerId}`;
+isInCall = true;
+document.getElementById('callActions').style.display = 'flex';
+incomingCallRequest = null;
+}
+
+function rejectIncoming() {
+if (incomingCallRequest) {
+addLog(Chamada de${callerIdLabel.innerText} recusada.`, "info");
+incomingCallRequest.close();
+incomingCallRequest = null;
+}
+hideIncomingPanel();
+}
+
+async function hangupCall() {
+if (!currentCall && !isInCall) {
+addLog("Nenhuma chamada ativa.", "info");
+return;
+}
+addLog("Encerrando chamada...", "info");
+if (currentCall) currentCall.close();
+resetCallUI();
+callStatusText.innerText = "Chamada finalizada";
+}
+
+function toggleMute() {
+if (!localStream) {
+addLog("Sem microfone ativo na chamada.", "error");
+return;
+}
+const audioTrack = localStream.getAudioTracks()[0];
+if (!audioTrack) return;
+isMicMuted = !isMicMuted;
+audioTrack.enabled = !isMicMuted;
+muteMicBtn.innerHTML = isMicMuted ? "🎤🔇 Desmutar" : "🎤 Mutar";
+addLog(isMicMuted ? "Microfone mutado" : "Microfone ativado", "info");
+}
+
+// Função principal de registro com lógica de fallback
+async function registerNumber(requestedNumber) {
+if (!/^\d{8}latex
+/.test(requestedNumber)) { addLog(`Número "
+
+{requestedNumber}" inválido. Use 8 dígitos., "error"); return false; } // Limpa peer anterior if (peer) { peer.destroy(); peer = null; } resetCallUI(); myRegisteredNumber = null; myNumberDisplayArea.style.display = "none"; registrationStatusDiv.innerHTML =🔄 Tentando registrar ${requestedNumber}...;
+registrationStatusDiv.style.color = "#b9c2e6";
+
+// Função auxiliar para tentar criar peer com ID específico
+const tryRegister = (numberToTry, isFallback = false) => {
+return new Promise((resolve) => {
+addLog(isFallback ? 🔄 Tentando número alternativo${numberToTry}...:📡 Conectando ao servidor VoIP..., "info"); const newPeer = new Peer(numberToTry, { debug: 1, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] } }); let resolved = false; const timeout = setTimeout(() =&gt; { if (!resolved) { addLog(⏳ Timeout: servidor não respondeu para ${numberToTry}., "error");
+newPeer.destroy();
+resolve(false);
+}
+}, 15000);
+
+newPeer.on('open', (assignedId) => {
+clearTimeout(timeout);
+if (assignedId === numberToTry) {
+peer = newPeer;
+myRegisteredNumber = numberToTry;
+registrationStatusDiv.innerHTML = ✅ Registrado como${numberToTry}; registrationStatusDiv.style.color = "#a5f3c3"; activeNumberSpan.innerText = numberToTry; myNumberDisplayArea.style.display = "flex"; addLog(✔️ Número ${numberToTry} registrado com sucesso! Aguardando chamadas., "success");
+
+// Configura listener de chamadas recebidas
+peer.on('call', (call) => {
+const callerNum = call.peer;
+addLog(📲 Chamada entrante de${callerNum}, "info"); if (isInCall) { addLog(Ocupado, recusando ${callerNum}, "error");
+call.close();
+return;
+}
+incomingCallRequest = call;
+callerIdLabel.innerText = callerNum;
+incomingContainer.style.display = 'block';
+});
+
+peer.on('error', (err) => {
+if (err.type === 'peer-unavailable') {
+addLog(Destino offline:${err.message}, "error"); } else if (err.type === 'unavailable-id') { addLog(⚠️ O número latex
+{myRegisteredNumber} foi desconectado.`, "error"); } else { addLog(`Erro Peer: 
+
+{err.message || err.type}, "error"); } }); peer.on('close', () =&gt; { addLog("Conexão com servidor encerrada.", "error"); if (peer === newPeer) { registrationStatusDiv.innerHTML = "⚪ Desconectado"; myNumberDisplayArea.style.display = "none"; myRegisteredNumber = null; } }); resolve(true); } else { addLog(ID atribuído (latex
+{assignedId}) diferente do solicitado.`, "error"); newPeer.destroy(); resolve(false); } }); newPeer.on('error', (err) =&gt; { clearTimeout(timeout); let errorMsg = err.type || err.message; if (errorMsg === 'unavailable-id' || (errorMsg && errorMsg.includes('ID is taken'))) { addLog(`❌ Número 
+
+{numberToTry} já está em uso., "error"); } else if (errorMsg === 'network' || errorMsg.includes('Could not connect')) { addLog(❌ Falha de rede: não foi possível conectar ao servidor PeerJS., "error"); } else { addLog(❌ Erro ao registrar {errorMsg}`, "error");
+}
+newPeer.destroy();
+resolve(false);
+});
+});
+};
+
+// Primeira tentativa com o número solicitado
+let success = await tryRegister(requestedNumber, false);
+if (success) return true;
+
+// Fallback: tentar um número aleatório disponível (máximo 5 tentativas)
+addLog(⚠️ Número ${requestedNumber} indisponível. Buscando número livre..., "error"); for (let attempt = 0; attempt &lt; 5; attempt++) { const randomNum = Math.floor(10000000 + Math.random() * 90000000).toString(); addLog(Tentativa ${attempt+1}: número ${randomNum}, "info"); const fallbackSuccess = await tryRegister(randomNum, true); if (fallbackSuccess) { // Atualiza o campo de input com o número que deu certo myNumberInput.value = randomNum; addLog(✨ Registrado automaticamente como ${randomNum}. Use este número para receber chamadas., "success");
+return true;
+}
+await new Promise(r => setTimeout(r, 800));
+}
+registrationStatusDiv.innerHTML = ❌ Falha no registro. Verifique sua internet.;
+registrationStatusDiv.style.color = "#ffa4a4";
+addLog(❌ Não foi possível registrar nenhum número após várias tentativas., "error");
+return false;
+}
+
+function generateRandom8Digits() {
+return Math.floor(10000000 + Math.random() * 90000000).toString();
+}
+
+// Event Listeners
+randomBtn.addEventListener('click', () => {
+const rand = generateRandom8Digits();
+myNumberInput.value = rand;
+addLog(Número aleatório gerado: ${rand}`, "info");
+});
+
+registerBtn.addEventListener('click', async () => {
+let number = myNumberInput.value.trim();
+if (!number) {
+addLog("Digite ou gere um número de 8 dígitos.", "error");
+return;
+}
+if (!/^\d{8}$/.test(number)) { addLog("Formato inválido (exatamente 8 dígitos).", "error"); return; } if (myRegisteredNumber === number && peer && !peer.destroyed) { addLog(Você já está registrado como ${number}.`, "info");
+return;
+}
+await registerNumber(number);
+});
+
+callBtn.addEventListener('click', () => {
+if (!myRegisteredNumber || !peer) {
+addLog("Registre seu número primeiro.", "error");
+return;
+}
+const target = targetNumberInput.value.trim();
+if (!target) {
+addLog("Informe o número destino.", "error");
+return;
+}
+makeCall(target);
+});
+
+hangupBtn.addEventListener('click', hangupCall);
+muteMicBtn.addEventListener('click', toggleMute);
+acceptCallBtn.addEventListener('click', acceptIncoming);
+rejectCallBtn.addEventListener('click', rejectIncoming);
+
+// Sanitização dos inputs
+[myNumberInput, targetNumberInput].forEach(inp => {
+inp.addEventListener('input', (e) => {
+e.target.value = e.target.value.replace(/\D/g, '').slice(0,8);
+});
+});
+
+addLog("✅ Sistema VoIP carregado. Clique em 'Registrar' com seu número de 8 dígitos.", "success");
+addLog("💡 Se o número estiver ocupado, o sistema encontrará um automaticamente.", "info");
+</script>
+</body>
+</html>
