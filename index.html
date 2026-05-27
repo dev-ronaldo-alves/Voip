@@ -1,557 +1,557 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>VoIP Confiável - Número de 8 dígitos</title>
-<!-- PeerJS com fallback para servidor alternativo -->
-<script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, sans-serif;
-}
-
-body {
-background: linear-gradient(145deg, #10131c 0%, #1a1f2c 100%);
-min-height: 100vh;
-display: flex;
-justify-content: center;
-align-items: center;
-padding: 1.5rem;
-}
-
-.app-container {
-max-width: 620px;
-width: 100%;
-background: rgba(22, 26, 35, 0.85);
-backdrop-filter: blur(12px);
-border-radius: 3rem;
-box-shadow: 0 25px 45px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.05);
-padding: 1.8rem 1.8rem 2rem;
-}
-
-h1 {
-font-size: 1.8rem;
-font-weight: 600;
-background: linear-gradient(135deg, #E0E7FF, #A5B4FC);
--webkit-background-clip: text;
-background-clip: text;
-color: transparent;
-text-align: center;
-margin-bottom: 0.3rem;
-}
-
-.sub {
-text-align: center;
-color: #8b9bcf;
-font-size: 0.8rem;
-margin-bottom: 2rem;
-border-bottom: 1px dashed #2d3748;
-padding-bottom: 0.8rem;
-}
-
-.card {
-background: rgba(15, 19, 28, 0.7);
-border-radius: 2rem;
-padding: 1.4rem;
-margin-bottom: 1.5rem;
-border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.section-title {
-font-size: 1rem;
-font-weight: 600;
-color: #cbd5ff;
-margin-bottom: 1rem;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.input-group {
-display: flex;
-flex-wrap: wrap;
-gap: 12px;
-align-items: center;
-}
-
-input {
-flex: 2;
-background: #0f111a;
-border: 1px solid #2a2f3f;
-padding: 0.9rem 1.2rem;
-border-radius: 2rem;
-font-size: 1rem;
-color: #f0f3ff;
-font-weight: 500;
-outline: none;
-}
-
-input:focus {
-border-color: #6c8eff;
-box-shadow: 0 0 0 3px rgba(108, 142, 255, 0.2);
-}
-
-button {
-background: #2d3a5e;
-border: none;
-padding: 0.8rem 1.4rem;
-border-radius: 2rem;
-font-weight: 600;
-font-size: 0.9rem;
-color: white;
-cursor: pointer;
-transition: 0.2s;
-display: inline-flex;
-align-items: center;
-gap: 8px;
-}
-
-button.primary { background: #4f46e5; box-shadow: 0 5px 12px rgba(79, 70, 229, 0.3); }
-button.primary:hover { background: #6366f1; transform: translateY(-2px); }
-button.danger { background: #b91c1c; }
-button.danger:hover { background: #dc2626; }
-button.success { background: #0e7b4e; }
-button.warning { background: #d97706; }
-
-.status-badge {
-background: #1e2436;
-border-radius: 2rem;
-padding: 0.4rem 1rem;
-font-size: 0.8rem;
-display: inline-flex;
-align-items: center;
-gap: 8px;
-color: #b9c3e6;
-margin-top: 12px;
-}
-
-.my-number-area {
-display: flex;
-justify-content: space-between;
-align-items: center;
-flex-wrap: wrap;
-gap: 12px;
-margin-top: 10px;
-}
-
-.badge-number {
-background: #00000040;
-padding: 0.5rem 1rem;
-border-radius: 2rem;
-font-family: monospace;
-font-size: 1.3rem;
-font-weight: bold;
-color: #a5f3c3;
-letter-spacing: 2px;
-}
-
-.call-controls {
-display: flex;
-gap: 12px;
-margin-top: 15px;
-flex-wrap: wrap;
-}
-
-.incoming-panel {
-background: #2a1e3c;
-border-left: 6px solid #fbbf24;
-padding: 1rem;
-border-radius: 1.5rem;
-margin: 12px 0;
-}
-
-.log-area {
-background: #0a0c14;
-border-radius: 1.5rem;
-padding: 0.8rem;
-max-height: 200px;
-overflow-y: auto;
-font-family: monospace;
-font-size: 0.75rem;
-color: #9ca3cf;
-}
-
-.log-entry {
-border-bottom: 1px solid #1e2538;
-padding: 6px 4px;
-}
-
-.flex-row {
-display: flex;
-justify-content: space-between;
-align-items: center;
-gap: 12px;
-flex-wrap: wrap;
-}
-
-footer {
-font-size: 0.7rem;
-text-align: center;
-color: #6f7c9f;
-margin-top: 20px;
-}
-@media (max-width: 500px) {
-.app-container { padding: 1.2rem; }
-button { padding: 0.7rem 1.1rem; }
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>VoIP + Chat - Permissão de Microfone (Chrome)</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; padding: 12px; }
+        .app-container { max-width: 100%; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.15); overflow: hidden; }
+        .card { background: rgba(0, 0, 0, 0.25); border-radius: 28px; margin: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08); }
+        .card-title { font-size: 1.1rem; font-weight: 600; color: #e2e8f0; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; border-left: 3px solid #60a5fa; padding-left: 12px; }
+        .header { background: rgba(0, 0, 0, 0.3); padding: 16px 20px; text-align: center; }
+        .header h1 { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.5rem; background: linear-gradient(120deg, #c084fc, #60a5fa); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        .profile-box, .mic-permission-box { background: rgba(0, 0, 0, 0.35); border-radius: 24px; padding: 14px; margin-bottom: 12px; }
+        .peer-id-box { display: flex; align-items: center; justify-content: space-between; background: #0f172a; border-radius: 50px; padding: 8px 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
+        .peer-id-box span { font-family: monospace; font-size: 0.75rem; word-break: break-all; color: #e2e8f0; flex: 1; }
+        .copy-btn, .reconnect-peer, .request-mic-btn { background: #334155; border: none; padding: 6px 12px; border-radius: 40px; color: white; font-size: 0.7rem; cursor: pointer; }
+        .request-mic-btn { background: #f59e0b; width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 8px; }
+        .nickname-area { display: flex; gap: 10px; background: #0f172a; border-radius: 50px; padding: 6px 12px; }
+        .nickname-area input { flex: 1; background: transparent; border: none; color: white; font-size: 0.9rem; outline: none; }
+        .nickname-area button { background: #3b82f6; border: none; padding: 6px 14px; border-radius: 40px; color: white; }
+        .call-row { display: flex; gap: 10px; margin: 12px 0; }
+        .call-row input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 60px; color: white; }
+        .action-buttons { display: flex; gap: 10px; }
+        .btn-call, .btn-hangup, .btn-mute { flex: 1; padding: 12px; border-radius: 60px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
+        .btn-call { background: #10b981; color: white; }
+        .btn-hangup { background: #dc2626; color: white; }
+        .btn-mute { background: #334155; color: white; }
+        .btn-mute.active { background: #f59e0b; }
+        .status-area { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 12px; margin-top: 12px; }
+        .timer { font-family: monospace; font-size: 1.1rem; color: #facc15; }
+        .contacts-list { max-height: 250px; overflow-y: auto; margin-bottom: 12px; }
+        .contact-item { background: #0f172a; border-radius: 60px; padding: 10px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+        .contact-name { font-weight: 600; color: white; font-size: 0.9rem; }
+        .contact-id { font-size: 0.65rem; font-family: monospace; color: #94a3b8; }
+        .contact-actions { display: flex; gap: 8px; }
+        .contact-actions button { background: #334155; border: none; padding: 6px 12px; border-radius: 40px; color: white; font-size: 0.7rem; cursor: pointer; }
+        .contact-actions .call-contact { background: #10b981; }
+        .contact-actions .chat-contact { background: #3b82f6; }
+        .add-contact-form { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+        .add-contact-form input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 10px 14px; border-radius: 60px; color: white; }
+        .add-contact-form button { background: #10b981; border: none; padding: 0 18px; border-radius: 60px; color: white; font-weight: bold; }
+        .chat-messages { height: 35vh; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.2); border-radius: 24px; margin-bottom: 10px; }
+        .message { max-width: 85%; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; }
+        .message.sent { align-self: flex-end; background: #10b981; color: white; }
+        .message.received { align-self: flex-start; background: #334155; color: white; }
+        .chat-input-area { display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 60px; color: white; }
+        .chat-input-area button { background: #60a5fa; border: none; padding: 0 18px; border-radius: 60px; color: white; }
+        .peer-status, .mic-status, .security-warning { font-size: 0.7rem; margin-top: 8px; text-align: center; }
+        .security-warning { background: #dc262620; padding: 8px; border-radius: 12px; color: #fca5a5; }
+        .footer-note { font-size: 0.6rem; text-align: center; padding: 12px; color: #64748b; }
+        #remoteAudio { display: none; }
+        button { cursor: pointer; touch-action: manipulation; }
+        input, textarea { font-size: 16px !important; }
+    </style>
 </head>
 <body>
-<div class="app-container" id="appRoot">
-<h1>📞 VoIP Confiável</h1>
-<div class="sub">Chamadas P2P · Número pessoal de 8 dígitos</div>
+<div class="app-container">
+    <div class="header">
+        <h1><i class="fas fa-phone-alt"></i> <i class="fas fa-comments"></i> VoIP + Chat</h1>
+        <p>Chamadas seguras | Necessário HTTPS e permissão de microfone</p>
+    </div>
 
-<!-- SEÇÃO REGISTRO -->
-<div class="card">
-<div class="section-title"><span>📇</span> Meu número VoIP</div>
-<div class="input-group">
-<input type="text" id="myNumberInput" placeholder="Ex: 12345678" maxlength="8" inputmode="numeric">
-<button id="randomBtn" class="warning">🎲 Aleatório</button>
-<button id="registerBtn" class="primary">🔗 Registrar</button>
-</div>
-<div id="registrationStatus" class="status-badge">⚪ Não registrado</div>
-<div id="myNumberDisplayArea" style="display: none;" class="my-number-area">
-<span>🔔 Número ativo:</span>
-<span id="activeNumberSpan" class="badge-number">--------</span>
-</div>
-</div>
+    <div class="sections">
+        <!-- Aviso de segurança (HTTPS) -->
+        <div id="securityWarning" class="security-warning" style="display: none;"></div>
 
-<!-- SEÇÃO LIGAR -->
-<div class="card">
-<div class="section-title"><span>📞</span> Ligar para outro número</div>
-<div class="input-group">
-<input type="text" id="targetNumberInput" placeholder="Número destino (8 dígitos)" maxlength="8" inputmode="numeric">
-<button id="callBtn" class="primary">📞 Ligar</button>
-</div>
-<div id="callActions" style="display: none;" class="call-controls">
-<button id="hangupBtn" class="danger">❌ Desligar</button>
-<button id="muteMicBtn" class="warning">🎤 Mutar</button>
-</div>
-<div id="callStatusText" style="font-size: 0.8rem; margin-top: 12px; color: #b9c2e6;"></div>
-</div>
+        <!-- Perfil local -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-user-circle"></i> Meu perfil</div>
+            <div class="profile-box">
+                <div class="peer-id-box">
+                    <span id="myImmutableId">Gerando ID...</span>
+                    <div>
+                        <button id="copyIdBtn" class="copy-btn"><i class="fas fa-copy"></i> Copiar</button>
+                        <button id="reconnectPeerBtn" class="reconnect-peer"><i class="fas fa-sync-alt"></i> Recarregar Peer</button>
+                    </div>
+                </div>
+                <div class="nickname-area">
+                    <input type="text" id="nicknameInput" placeholder="Seu nome mutável" maxlength="30">
+                    <button id="saveNicknameBtn">Salvar</button>
+                </div>
+                <div id="peerConnectionStatus" class="peer-status">🟡 Inicializando...</div>
+            </div>
 
-<!-- NOTIFICAÇÃO DE CHAMADA RECEBIDA -->
-<div id="incomingContainer" style="display: none;">
-<div class="incoming-panel" id="incomingPanel">
-<div class="flex-row">
-<span>📳 Chamada recebida de:</span>
-<strong id="callerIdLabel" style="color:#ffd966;">XXXXXXXX</strong>
-</div>
-<div style="display: flex; gap: 12px; margin-top: 12px;">
-<button id="acceptCallBtn" class="success">✅ Atender</button>
-<button id="rejectCallBtn" class="danger">❌ Recusar</button>
-</div>
-</div>
-</div>
+            <!-- Permissão de microfone - componente dedicado -->
+            <div class="mic-permission-box">
+                <div class="card-title" style="margin-bottom: 8px;"><i class="fas fa-microphone"></i> Permissão de áudio</div>
+                <div id="micStatus" class="mic-status">🔴 Permissão não concedida</div>
+                <button id="requestMicBtn" class="request-mic-btn"><i class="fas fa-microphone"></i> Permitir Microfone</button>
+                <div style="font-size: 0.7rem; color:#94a3b8; margin-top: 8px;">Necessário para fazer/receber chamadas</div>
+            </div>
+        </div>
 
-<!-- LOG DE EVENTOS -->
-<div class="card">
-<div class="section-title"><span>📋</span> Eventos do sistema</div>
-<div id="logList" class="log-area">
-<div class="log-entry">📡 Pronto. Registre um número de 8 dígitos.</div>
-</div>
-</div>
-<footer>🔁 Se o número escolhido falhar, o sistema tentará um número aleatório disponível automaticamente.</footer>
-</div>
+        <!-- Chamada VoIP -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-phone-alt"></i> Chamada de voz</div>
+            <div class="call-row">
+                <input type="text" id="remotePeerIdVoip" placeholder="ID imutável do contato">
+            </div>
+            <div class="action-buttons">
+                <button id="callBtn" class="btn-call"><i class="fas fa-phone"></i> Chamar</button>
+                <button id="hangupBtn" class="btn-hangup" disabled><i class="fas fa-phone-slash"></i> Desligar</button>
+                <button id="muteBtn" class="btn-mute" disabled><i class="fas fa-microphone"></i> Silenciar</button>
+            </div>
+            <div class="status-area">
+                <div style="display: flex; justify-content: space-between;">
+                    <span id="connectionStatus">🔴 Desconectado</span>
+                    <span id="callTimer" class="timer">00:00</span>
+                </div>
+                <div class="volume-control" style="margin-top: 8px;">
+                    <i class="fas fa-volume-down"></i>
+                    <input type="range" id="volumeSlider" min="0" max="100" value="80" style="flex:1">
+                    <i class="fas fa-volume-up"></i>
+                </div>
+            </div>
+        </div>
 
+        <!-- Contatos -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-address-book"></i> Meus Contatos</div>
+            <div id="contactsList" class="contacts-list"><div style="color:#94a3b8; text-align:center; padding:20px;">Carregando...</div></div>
+            <div class="add-contact-form">
+                <input type="text" id="newContactName" placeholder="Nome">
+                <input type="text" id="newContactId" placeholder="ID imutável">
+                <button id="addContactBtn"><i class="fas fa-plus"></i> Adicionar</button>
+            </div>
+        </div>
+
+        <!-- Chat -->
+        <div class="card">
+            <div class="card-title"><i class="fas fa-comment-dots"></i> Bate-papo</div>
+            <div class="chat-remote-status" id="chatRemoteStatus">🔴 Nenhum chat conectado</div>
+            <div id="chatMessages" class="chat-messages"><div class="message received" style="opacity:0.7;">Conecte-se a um contato para conversar</div></div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
+                <button id="sendMsgBtn"><i class="fas fa-paper-plane"></i> Enviar</button>
+            </div>
+            <div id="typingIndicator" style="font-size:0.7rem; color:#94a3b8; margin-top:6px;"></div>
+        </div>
+    </div>
+    <div class="footer-note">ID imutável salvo localmente | Permissão de microfone exigida pelo Chrome (HTTPS)</div>
+</div>
+<audio id="remoteAudio" autoplay></audio>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script>
-// -------------------- DOM --------------------
-const myNumberInput = document.getElementById('myNumberInput');
-const randomBtn = document.getElementById('randomBtn');
-const registerBtn = document.getElementById('registerBtn');
-const registrationStatusDiv = document.getElementById('registrationStatus');
-const myNumberDisplayArea = document.getElementById('myNumberDisplayArea');
-const activeNumberSpan = document.getElementById('activeNumberSpan');
-const targetNumberInput = document.getElementById('targetNumberInput');
-const callBtn = document.getElementById('callBtn');
-const hangupBtn = document.getElementById('hangupBtn');
-const muteMicBtn = document.getElementById('muteMicBtn');
-const callStatusText = document.getElementById('callStatusText');
-const incomingContainer = document.getElementById('incomingContainer');
-const callerIdLabel = document.getElementById('callerIdLabel');
-const acceptCallBtn = document.getElementById('acceptCallBtn');
-const rejectCallBtn = document.getElementById('rejectCallBtn');
-const logList = document.getElementById('logList');
+    (function() {
+        // ---------- VERIFICAÇÃO DE CONTEXTO SEGURO (HTTPS ou localhost) ----------
+        function isSecureContext() {
+            return location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+        }
 
-// -------------------- Estado Global --------------------
-let peer = null;
-let currentCall = null;
-let localStream = null;
-let isMicMuted = false;
-let myRegisteredNumber = null;
-let incomingCallRequest = null;
-let isInCall = false;
+        const securityWarningDiv = document.getElementById('securityWarning');
+        if (!isSecureContext()) {
+            securityWarningDiv.style.display = 'block';
+            securityWarningDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ATENÇÃO: O Chrome exige HTTPS ou localhost para acessar o microfone. Você está em ambiente não seguro. Para testar, use https:// ou execute localmente.';
+        } else {
+            securityWarningDiv.style.display = 'none';
+        }
 
-// Helpers
-function addLog(msg, type = "info") {
-const logDiv = document.createElement('div');
-logDiv.className = 'log-entry';
-const time = new Date().toLocaleTimeString('pt-BR');
-logDiv.innerHTML = [${time}] ${msg};
-if (type === 'error') logDiv.style.color = '#ffa4a4';
-else if (type === 'success') logDiv.style.color = '#b9f5d8';
-else logDiv.style.color = '#b9c2e6';
-logList.appendChild(logDiv);
-logDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-if (logList.children.length > 50) logList.removeChild(logList.children[0]);
-}
+        // ---------- STORAGE ----------
+        const STORAGE_IMMUTABLE_ID = 'voipapp_immutable_id';
+        const STORAGE_NICKNAME = 'voipapp_nickname';
+        const STORAGE_CONTACTS = 'voipapp_contacts';
 
-async function resetCallUI() {
-if (currentCall) {
-try { currentCall.close(); } catch(e) {}
-currentCall = null;
-}
-if (localStream) {
-localStream.getTracks().forEach(track => track.stop());
-localStream = null;
-}
-isInCall = false;
-isMicMuted = false;
-if (muteMicBtn) muteMicBtn.innerHTML = '🎤 Mutar';
-if (callStatusText) callStatusText.innerText = '';
-const callActionsDiv = document.getElementById('callActions');
-if (callActionsDiv) callActionsDiv.style.display = 'none';
-detachRemoteAudio();
-hideIncomingPanel();
-if (incomingCallRequest) {
-try { incomingCallRequest.close(); } catch(e) {}
-incomingCallRequest = null;
-}
-}
+        // ID IMUTÁVEL
+        function getOrCreateImmutableId() {
+            let stored = localStorage.getItem(STORAGE_IMMUTABLE_ID);
+            if (stored && stored.trim()) return stored;
+            let newId = (crypto.randomUUID?.()) || 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => { let r = Math.random()*16|0, v = c==='x'?r:(r&0x3|0x8); return v.toString(16); });
+            localStorage.setItem(STORAGE_IMMUTABLE_ID, newId);
+            return newId;
+        }
+        const immutableId = getOrCreateImmutableId();
+        document.getElementById('myImmutableId').textContent = immutableId;
 
-function detachRemoteAudio() {
-const audioEl = document.getElementById('remoteAudioElement');
-if (audioEl && audioEl.srcObject) {
-audioEl.srcObject.getTracks().forEach(t => t.stop());
-audioEl.srcObject = null;
-}
-}
+        // Nome mutável
+        function getNickname() {
+            let nick = localStorage.getItem(STORAGE_NICKNAME);
+            if (!nick) nick = "Usuário_" + Math.floor(Math.random()*1000);
+            localStorage.setItem(STORAGE_NICKNAME, nick);
+            return nick;
+        }
+        function setNickname(newName) {
+            if (newName?.trim()) localStorage.setItem(STORAGE_NICKNAME, newName.trim());
+            return getNickname();
+        }
+        let currentNickname = getNickname();
+        document.getElementById('nicknameInput').value = currentNickname;
 
-function attachRemoteAudio(stream) {
-let audioElement = document.getElementById('remoteAudioElement');
-if (!audioElement) {
-audioElement = document.createElement('audio');
-audioElement.id = 'remoteAudioElement';
-audioElement.autoplay = true;
-audioElement.style.display = 'none';
-document.body.appendChild(audioElement);
-}
-audioElement.srcObject = stream;
-audioElement.play().catch(e => addLog("Erro ao reproduzir áudio: " + e.message, "error"));
-}
+        // Contatos
+        let contacts = [];
+        function loadContacts() {
+            try { contacts = JSON.parse(localStorage.getItem(STORAGE_CONTACTS) || '[]'); } catch(e) { contacts = []; }
+            renderContacts();
+        }
+        function saveContacts() { localStorage.setItem(STORAGE_CONTACTS, JSON.stringify(contacts)); }
+        function addContact(name, id) {
+            if (!name.trim() || !id.trim()) return false;
+            if (contacts.some(c => c.id === id)) return false;
+            contacts.push({ name: name.trim(), id: id.trim() });
+            saveContacts();
+            renderContacts();
+            return true;
+        }
+        function deleteContact(idx) { contacts.splice(idx,1); saveContacts(); renderContacts(); }
+        function updateContact(idx, name, id) {
+            if (!name.trim() || !id.trim()) return false;
+            contacts[idx] = { name: name.trim(), id: id.trim() };
+            saveContacts();
+            renderContacts();
+            return true;
+        }
+        function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]); }
+        function renderContacts() {
+            const container = document.getElementById('contactsList');
+            if (!container) return;
+            if (!contacts.length) { container.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:20px;">Nenhum contato</div>'; return; }
+            container.innerHTML = contacts.map((c, idx) => `
+                <div class="contact-item">
+                    <div class="contact-info">
+                        <div class="contact-name">${escapeHtml(c.name)}</div>
+                        <div class="contact-id">${escapeHtml(c.id.substring(0,12))}...</div>
+                    </div>
+                    <div class="contact-actions">
+                        <button class="call-contact" data-idx="${idx}"><i class="fas fa-phone"></i></button>
+                        <button class="chat-contact" data-idx="${idx}"><i class="fas fa-comment"></i></button>
+                        <button class="edit-contact" data-idx="${idx}"><i class="fas fa-edit"></i></button>
+                        <button class="delete-contact" data-idx="${idx}"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `).join('');
+            document.querySelectorAll('.call-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) { document.getElementById('remotePeerIdVoip').value = c.id; makeCall(c.id); } });
+            document.querySelectorAll('.chat-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) connectChat(c.id); });
+            document.querySelectorAll('.edit-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; let n = prompt("Novo nome:", c.name); if(n?.trim()) updateContact(btn.dataset.idx, n, prompt("Novo ID:", c.id) || c.id); });
+            document.querySelectorAll('.delete-contact').forEach(btn => btn.onclick = () => { if(confirm("Remover?")) deleteContact(btn.dataset.idx); });
+        }
 
-function hideIncomingPanel() {
-incomingContainer.style.display = 'none';
-incomingCallRequest = null;
-}
+        // ---------- ELEMENTOS DOM ----------
+        const remotePeerIdVoip = document.getElementById('remotePeerIdVoip');
+        const callBtn = document.getElementById('callBtn');
+        const hangupBtn = document.getElementById('hangupBtn');
+        const muteBtn = document.getElementById('muteBtn');
+        const connectionStatusSpan = document.getElementById('connectionStatus');
+        const callTimerSpan = document.getElementById('callTimer');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const remoteAudio = document.getElementById('remoteAudio');
+        const copyIdBtn = document.getElementById('copyIdBtn');
+        const reconnectBtn = document.getElementById('reconnectPeerBtn');
+        const requestMicBtn = document.getElementById('requestMicBtn');
+        const micStatusSpan = document.getElementById('micStatus');
+        const peerStatusSpan = document.getElementById('peerConnectionStatus');
+        const chatMessagesDiv = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendMsgBtn = document.getElementById('sendMsgBtn');
+        const chatRemoteStatusSpan = document.getElementById('chatRemoteStatus');
+        const typingIndicatorDiv = document.getElementById('typingIndicator');
 
-async function getLocalUserMedia() {
-try {
-const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-return stream;
-} catch (err) {
-addLog(❌ Microfone inacessível: ${err.message}`, "error");
-throw err;
-}
-}
+        // ---------- VARIÁVEIS GLOBAIS ----------
+        let peer = null;
+        let localStream = null;
+        let currentCall = null;
+        let isCallActive = false;
+        let callStartTime = null;
+        let timerInterval = null;
+        let isMuted = false;
+        let dataConnection = null;
+        let currentChatPeerId = null;
+        let typingTimeout = null;
 
-function setupCallHandlers(call, remoteId) {
-call.on('stream', (remoteStream) => {
-addLog(🔊 Áudio conectado com${remoteId}, "success"); attachRemoteAudio(remoteStream); callStatusText.innerText =🎙️ Em chamada com latex
-{remoteId}`; isInCall = true; document.getElementById('callActions').style.display = 'flex'; }); call.on('close', () =&gt; { addLog(`📴 Chamada encerrada com 
+        // ---------- GERENCIAMENTO DE PERMISSÃO DE MICROFONE (COM TRATAMENTO ESPECÍFICO PARA CHROME) ----------
+        async function checkMicPermission() {
+            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+                micStatusSpan.innerHTML = '⚠️ API de mídia não suportada pelo navegador.';
+                return false;
+            }
+            try {
+                const devices = await navigator.mediaDevices.enumerateDevices();
+                const hasAudioInput = devices.some(d => d.kind === 'audioinput');
+                if (!hasAudioInput) {
+                    micStatusSpan.innerHTML = '❌ Nenhum microfone encontrado no sistema.';
+                    return false;
+                }
+                // Tenta obter stream para verificar permissão real (sem pedir novamente)
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                stream.getTracks().forEach(t => t.stop());
+                micStatusSpan.innerHTML = '✅ Microfone liberado';
+                return true;
+            } catch (err) {
+                console.error("Erro ao verificar permissão:", err);
+                if (err.name === 'NotAllowedError') {
+                    micStatusSpan.innerHTML = '🔴 Permissão negada. Clique no botão abaixo para solicitar.';
+                } else if (err.name === 'NotFoundError') {
+                    micStatusSpan.innerHTML = '❌ Nenhum microfone detectado.';
+                } else {
+                    micStatusSpan.innerHTML = `⚠️ Erro: ${err.message}`;
+                }
+                return false;
+            }
+        }
 
-{remoteId}, "info"); resetCallUI(); callStatusText.innerText = "Chamada finalizada"; }); call.on('error', (err) =&gt; { addLog(Erro na chamada com {err.message || err}`, "error");
-resetCallUI();
-});
-}
+        async function requestMicrophonePermission() {
+            // Em ambiente não seguro, impedir a solicitação e orientar o usuário
+            if (!isSecureContext()) {
+                alert("⚠️ O Chrome exige HTTPS ou localhost para acessar o microfone.\n\nPor favor, use HTTPS ou acesse via localhost para testar chamadas.");
+                micStatusSpan.innerHTML = '🔒 Contexto não seguro. Use HTTPS ou localhost.';
+                return false;
+            }
 
-async function makeCall(targetNumber) {
-if (!peer || !myRegisteredNumber) {
-addLog("Registre seu número antes de ligar.", "error");
-return;
-}
-if (targetNumber === myRegisteredNumber) {
-addLog("Não pode ligar para si mesmo.", "error");
-return;
-}
-if (!/^\d{8}{targetNumber}..., "info"); callStatusText.innerText =📳 Ligando para latex
-{targetNumber}...`; const call = peer.call(targetNumber, stream); currentCall = call; setupCallHandlers(call, targetNumber); call.on('error', (err) =&gt; { addLog(`Falha ao chamar 
+            micStatusSpan.innerHTML = '🟡 Solicitando permissão...';
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                // Se já existir stream, parar a anterior
+                if (localStream) {
+                    localStream.getTracks().forEach(t => t.stop());
+                }
+                localStream = stream;
+                micStatusSpan.innerHTML = '✅ Microfone ativo';
+                return true;
+            } catch (err) {
+                console.error("Erro ao solicitar permissão:", err);
+                if (err.name === 'NotAllowedError') {
+                    micStatusSpan.innerHTML = '🔴 Permissão negada pelo Chrome. Clique no ícone de cadeado ao lado da URL e permita o acesso ao microfone.';
+                } else if (err.name === 'NotFoundError') {
+                    micStatusSpan.innerHTML = '❌ Nenhum microfone encontrado. Conecte um microfone e recarregue.';
+                } else {
+                    micStatusSpan.innerHTML = `❌ Falha: ${err.message}`;
+                }
+                return false;
+            }
+        }
 
-{targetNumber}: {targetNumber} offline`;
-});
-}
+        // Função para obter stream (garante que existe)
+        async function getMicrophoneStream() {
+            if (localStream && localStream.active && localStream.getAudioTracks().length > 0) {
+                return localStream;
+            }
+            // Tenta obter novamente (pode solicitar permissão novamente)
+            const granted = await requestMicrophonePermission();
+            if (!granted) throw new Error("Microfone não disponível");
+            return localStream;
+        }
 
-async function acceptIncoming() {
-if (!incomingCallRequest) return;
-const call = incomingCallRequest;
-const callerId = callerIdLabel.innerText;
-if (isInCall) {
-addLog(Ocupado, recusando chamada de ${callerId}, "error"); call.close(); hideIncomingPanel(); return; } let stream; try { stream = await getLocalUserMedia(); localStream = stream; } catch(e) { call.close(); hideIncomingPanel(); return; } addLog(📞 Atendendo ${callerId}..., "success");
-call.answer(stream);
-currentCall = call;
-setupCallHandlers(call, callerId);
-hideIncomingPanel();
-callStatusText.innerText = Em chamada com ${callerId}`;
-isInCall = true;
-document.getElementById('callActions').style.display = 'flex';
-incomingCallRequest = null;
-}
+        // Inicialização: verifica permissão sem solicitar (apenas exibe status)
+        checkMicPermission();
 
-function rejectIncoming() {
-if (incomingCallRequest) {
-addLog(Chamada de${callerIdLabel.innerText} recusada.`, "info");
-incomingCallRequest.close();
-incomingCallRequest = null;
-}
-hideIncomingPanel();
-}
+        // Botão de solicitação explícita
+        requestMicBtn.addEventListener('click', async () => {
+            const granted = await requestMicrophonePermission();
+            if (granted) {
+                alert("✅ Microfone liberado! Agora você pode fazer e receber chamadas.");
+            } else {
+                alert("❌ Não foi possível acessar o microfone. Verifique as permissões do site.");
+            }
+        });
 
-async function hangupCall() {
-if (!currentCall && !isInCall) {
-addLog("Nenhuma chamada ativa.", "info");
-return;
-}
-addLog("Encerrando chamada...", "info");
-if (currentCall) currentCall.close();
-resetCallUI();
-callStatusText.innerText = "Chamada finalizada";
-}
+        // ---------- FUNÇÕES VOIP (com verificação de microfone) ----------
+        function updateStatusUI(text, connected) { connectionStatusSpan.innerHTML = connected ? `🟢 ${text}` : `🔴 ${text}`; }
+        function formatTime(s) { return `${Math.floor(s/60)}`.padStart(2,'0')+':'+`${s%60}`.padStart(2,'0'); }
+        function startTimer() { if(timerInterval) clearInterval(timerInterval); callStartTime = Date.now(); timerInterval = setInterval(() => { if(isCallActive && callStartTime) callTimerSpan.textContent = formatTime(Math.floor((Date.now()-callStartTime)/1000)); else callTimerSpan.textContent = '00:00'; }, 1000); }
+        function stopTimer() { if(timerInterval) clearInterval(timerInterval); callTimerSpan.textContent = '00:00'; callStartTime = null; }
+        
+        function setCallUICleanup() {
+            isCallActive = false;
+            callBtn.disabled = false;
+            hangupBtn.disabled = true;
+            muteBtn.disabled = true;
+            muteBtn.classList.remove('active');
+            muteBtn.innerHTML = '<i class="fas fa-microphone"></i> Silenciar';
+            if(localStream) localStream.getAudioTracks().forEach(t => { if(!t.enabled) t.enabled = true; });
+            updateStatusUI('Sem chamada ativa', false);
+            stopTimer();
+        }
+        
+        async function endCall() {
+            if(currentCall) { currentCall.close(); currentCall = null; }
+            if(remoteAudio.srcObject) { remoteAudio.srcObject.getTracks().forEach(t=>t.stop()); remoteAudio.srcObject = null; }
+            setCallUICleanup();
+        }
 
-function toggleMute() {
-if (!localStream) {
-addLog("Sem microfone ativo na chamada.", "error");
-return;
-}
-const audioTrack = localStream.getAudioTracks()[0];
-if (!audioTrack) return;
-isMicMuted = !isMicMuted;
-audioTrack.enabled = !isMicMuted;
-muteMicBtn.innerHTML = isMicMuted ? "🎤🔇 Desmutar" : "🎤 Mutar";
-addLog(isMicMuted ? "Microfone mutado" : "Microfone ativado", "info");
-}
+        function setupCallEvents(call) {
+            call.on('stream', (remoteStream) => {
+                remoteAudio.srcObject = remoteStream;
+                remoteAudio.volume = volumeSlider.value/100;
+                updateStatusUI('Em chamada', true);
+                isCallActive = true;
+                startTimer();
+            });
+            call.on('close', () => endCall());
+            call.on('error', () => { endCall(); alert("Erro na chamada"); });
+        }
 
-// Função principal de registro com lógica de fallback
-async function registerNumber(requestedNumber) {
-if (!/^\d{8}latex
-/.test(requestedNumber)) { addLog(`Número "
+        async function makeCall(remoteId) {
+            if(!remoteId) { alert("Digite o ID do contato."); return; }
+            if(currentCall) { alert("Já em chamada."); return; }
+            if(!peer || peer.disconnected) { alert("Peer desconectado. Tente 'Recarregar Peer'."); return; }
+            try {
+                let stream = await getMicrophoneStream();
+                if (!stream) throw new Error("Sem microfone");
+                const call = peer.call(remoteId.trim(), stream);
+                currentCall = call;
+                setupCallEvents(call);
+                callBtn.disabled = true; hangupBtn.disabled = false; muteBtn.disabled = false;
+                updateStatusUI(`Chamando...`, false);
+                setTimeout(() => { if(currentCall === call && !isCallActive) endCall(); }, 20000);
+            } catch(e) { alert(e.message); setCallUICleanup(); }
+        }
 
-{requestedNumber}" inválido. Use 8 dígitos., "error"); return false; } // Limpa peer anterior if (peer) { peer.destroy(); peer = null; } resetCallUI(); myRegisteredNumber = null; myNumberDisplayArea.style.display = "none"; registrationStatusDiv.innerHTML =🔄 Tentando registrar ${requestedNumber}...;
-registrationStatusDiv.style.color = "#b9c2e6";
+        function toggleMute() {
+            if(!localStream || !isCallActive) return;
+            const track = localStream.getAudioTracks()[0];
+            if(track) {
+                track.enabled = !track.enabled;
+                isMuted = !track.enabled;
+                if(isMuted) { muteBtn.classList.add('active'); muteBtn.innerHTML = '<i class="fas fa-microphone-slash"></i> Mutado'; }
+                else { muteBtn.classList.remove('active'); muteBtn.innerHTML = '<i class="fas fa-microphone"></i> Silenciar'; }
+            }
+        }
 
-// Função auxiliar para tentar criar peer com ID específico
-const tryRegister = (numberToTry, isFallback = false) => {
-return new Promise((resolve) => {
-addLog(isFallback ? 🔄 Tentando número alternativo${numberToTry}...:📡 Conectando ao servidor VoIP..., "info"); const newPeer = new Peer(numberToTry, { debug: 1, config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] } }); let resolved = false; const timeout = setTimeout(() =&gt; { if (!resolved) { addLog(⏳ Timeout: servidor não respondeu para ${numberToTry}., "error");
-newPeer.destroy();
-resolve(false);
-}
-}, 15000);
+        // ---------- CHAT (sem alterações) ----------
+        function addChatMessage(text, type, sender = '') {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `message ${type}`;
+            let display = type === 'sent' ? `${currentNickname} (você)` : (sender || 'Contato');
+            msgDiv.innerHTML = `<div>${escapeHtml(text)}</div><div style="font-size:0.65rem; opacity:0.7;">${display} • ${new Date().toLocaleTimeString()}</div>`;
+            chatMessagesDiv.appendChild(msgDiv);
+            msgDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
 
-newPeer.on('open', (assignedId) => {
-clearTimeout(timeout);
-if (assignedId === numberToTry) {
-peer = newPeer;
-myRegisteredNumber = numberToTry;
-registrationStatusDiv.innerHTML = ✅ Registrado como${numberToTry}; registrationStatusDiv.style.color = "#a5f3c3"; activeNumberSpan.innerText = numberToTry; myNumberDisplayArea.style.display = "flex"; addLog(✔️ Número ${numberToTry} registrado com sucesso! Aguardando chamadas., "success");
+        function updateChatStatus(connected, peerId='') {
+            chatRemoteStatusSpan.innerHTML = connected ? `🟢 Conectado a ${peerId.substring(0,8)}...` : `🔴 Nenhum chat conectado`;
+        }
 
-// Configura listener de chamadas recebidas
-peer.on('call', (call) => {
-const callerNum = call.peer;
-addLog(📲 Chamada entrante de${callerNum}, "info"); if (isInCall) { addLog(Ocupado, recusando ${callerNum}, "error");
-call.close();
-return;
-}
-incomingCallRequest = call;
-callerIdLabel.innerText = callerNum;
-incomingContainer.style.display = 'block';
-});
+        function sendChatMessage() {
+            const text = chatInput.value.trim();
+            if(!text) return;
+            if(!dataConnection?.open) { alert("Conecte-se a um contato primeiro."); return; }
+            dataConnection.send({ type: 'chat', message: text, senderName: currentNickname });
+            addChatMessage(text, 'sent');
+            chatInput.value = '';
+        }
 
-peer.on('error', (err) => {
-if (err.type === 'peer-unavailable') {
-addLog(Destino offline:${err.message}, "error"); } else if (err.type === 'unavailable-id') { addLog(⚠️ O número latex
-{myRegisteredNumber} foi desconectado.`, "error"); } else { addLog(`Erro Peer: 
+        function closeDataConnection() {
+            if(dataConnection) { dataConnection.close(); dataConnection = null; }
+            currentChatPeerId = null;
+            updateChatStatus(false);
+        }
 
-{err.message || err.type}, "error"); } }); peer.on('close', () =&gt; { addLog("Conexão com servidor encerrada.", "error"); if (peer === newPeer) { registrationStatusDiv.innerHTML = "⚪ Desconectado"; myNumberDisplayArea.style.display = "none"; myRegisteredNumber = null; } }); resolve(true); } else { addLog(ID atribuído (latex
-{assignedId}) diferente do solicitado.`, "error"); newPeer.destroy(); resolve(false); } }); newPeer.on('error', (err) =&gt; { clearTimeout(timeout); let errorMsg = err.type || err.message; if (errorMsg === 'unavailable-id' || (errorMsg && errorMsg.includes('ID is taken'))) { addLog(`❌ Número 
+        function setupDataEvents(conn, remoteId) {
+            conn.on('open', () => {
+                currentChatPeerId = remoteId;
+                updateChatStatus(true, remoteId);
+                addChatMessage(`💬 Conectado com ${remoteId.substring(0,8)}...`, 'received', 'Sistema');
+                conn.send({ type: 'system', info: `nickname:${currentNickname}` });
+            });
+            conn.on('data', (data) => {
+                if(data?.type === 'chat') addChatMessage(data.message, 'received', data.senderName || remoteId);
+                else if(data?.type === 'typing') { typingIndicatorDiv.textContent = 'Digitando...'; clearTimeout(typingTimeout); typingTimeout = setTimeout(() => typingIndicatorDiv.textContent = '', 2000); }
+                else if(data?.type === 'system' && data.info?.startsWith('nickname:')) addChatMessage(`📛 Apelido: ${data.info.split(':')[1]}`, 'received', 'Sistema');
+            });
+            conn.on('close', () => { updateChatStatus(false); addChatMessage(`🔌 Chat encerrado`, 'received', 'Sistema'); if(dataConnection === conn) { dataConnection = null; currentChatPeerId = null; } });
+            conn.on('error', () => addChatMessage(`Erro no chat`, 'received', 'Sistema'));
+        }
 
-{numberToTry} já está em uso., "error"); } else if (errorMsg === 'network' || errorMsg.includes('Could not connect')) { addLog(❌ Falha de rede: não foi possível conectar ao servidor PeerJS., "error"); } else { addLog(❌ Erro ao registrar {errorMsg}`, "error");
-}
-newPeer.destroy();
-resolve(false);
-});
-});
-};
+        function connectChat(remoteId) {
+            if(!remoteId) { alert("Informe o ID."); return; }
+            if(dataConnection?.open) { if(currentChatPeerId === remoteId) alert("Já conectado."); else closeDataConnection(); }
+            if(!peer || peer.disconnected) { alert("Peer offline. Recarregue o peer."); return; }
+            const conn = peer.connect(remoteId.trim(), { reliable: true });
+            dataConnection = conn;
+            setupDataEvents(conn, remoteId);
+            addChatMessage(`🔄 Conectando...`, 'received', 'Sistema');
+            setTimeout(() => { if(dataConnection === conn && !conn.open) { addChatMessage(`❌ Falha ao conectar.`, 'received', 'Sistema'); updateChatStatus(false); } }, 8000);
+        }
 
-// Primeira tentativa com o número solicitado
-let success = await tryRegister(requestedNumber, false);
-if (success) return true;
+        function onIncomingData(conn) {
+            if(dataConnection?.open) { conn.close(); addChatMessage(`❗ Conexão recusada (já ocupado).`, 'received', 'Sistema'); return; }
+            dataConnection = conn;
+            setupDataEvents(conn, conn.peer);
+            addChatMessage(`📞 Solicitação de chat de ${conn.peer.substring(0,8)}...`, 'received', 'Sistema');
+        }
 
-// Fallback: tentar um número aleatório disponível (máximo 5 tentativas)
-addLog(⚠️ Número ${requestedNumber} indisponível. Buscando número livre..., "error"); for (let attempt = 0; attempt &lt; 5; attempt++) { const randomNum = Math.floor(10000000 + Math.random() * 90000000).toString(); addLog(Tentativa ${attempt+1}: número ${randomNum}, "info"); const fallbackSuccess = await tryRegister(randomNum, true); if (fallbackSuccess) { // Atualiza o campo de input com o número que deu certo myNumberInput.value = randomNum; addLog(✨ Registrado automaticamente como ${randomNum}. Use este número para receber chamadas., "success");
-return true;
-}
-await new Promise(r => setTimeout(r, 800));
-}
-registrationStatusDiv.innerHTML = ❌ Falha no registro. Verifique sua internet.;
-registrationStatusDiv.style.color = "#ffa4a4";
-addLog(❌ Não foi possível registrar nenhum número após várias tentativas., "error");
-return false;
-}
+        function sendTyping() { if(dataConnection?.open) dataConnection.send({ type: 'typing' }); }
 
-function generateRandom8Digits() {
-return Math.floor(10000000 + Math.random() * 90000000).toString();
-}
+        // ---------- PEER (com reconexão manual) ----------
+        function destroyPeer() {
+            if(peer && !peer.destroyed) peer.destroy();
+            peer = null;
+        }
 
-// Event Listeners
-randomBtn.addEventListener('click', () => {
-const rand = generateRandom8Digits();
-myNumberInput.value = rand;
-addLog(Número aleatório gerado: ${rand}`, "info");
-});
+        function initPeer() {
+            destroyPeer();
+            const options = { host: '0.peerjs.com', port: 443, path: '/', secure: true, debug: 0 };
+            peer = new Peer(immutableId, options);
+            peer.on('open', (id) => {
+                document.getElementById('myImmutableId').textContent = id;
+                peerStatusSpan.innerHTML = '✅ Conectado ao servidor P2P';
+                peerStatusSpan.style.color = '#10b981';
+                updateStatusUI("Conectado", true);
+            });
+            peer.on('call', async (incoming) => {
+                if(currentCall) { incoming.close(); return; }
+                try {
+                    let stream = await getMicrophoneStream();
+                    if (!stream) throw new Error("Sem microfone");
+                    incoming.answer(stream);
+                    currentCall = incoming;
+                    setupCallEvents(currentCall);
+                    callBtn.disabled = true; hangupBtn.disabled = false; muteBtn.disabled = false;
+                    updateStatusUI(`Atendendo...`, false);
+                    if(navigator.vibrate) navigator.vibrate(200);
+                } catch(e) { incoming.close(); alert("Não foi possível atender: microfone indisponível."); }
+            });
+            peer.on('connection', onIncomingData);
+            peer.on('error', (err) => {
+                console.error(err);
+                if(err.type === 'unavailable-id') peerStatusSpan.innerHTML = '❌ ID conflitante! Recarregue a página.';
+                else if(err.type === 'peer-unavailable') updateChatStatus(false);
+                else peerStatusSpan.innerHTML = '⚠️ Erro no peer. Clique em "Recarregar Peer".';
+                peerStatusSpan.style.color = '#ef4444';
+                updateStatusUI("Erro", false);
+            });
+            peer.on('disconnected', () => {
+                peerStatusSpan.innerHTML = '🟡 Desconectado, clique em Recarregar Peer';
+                peerStatusSpan.style.color = '#f59e0b';
+                updateStatusUI("Desconectado", false);
+            });
+            peer.on('close', () => { if(currentCall) endCall(); });
+        }
 
-registerBtn.addEventListener('click', async () => {
-let number = myNumberInput.value.trim();
-if (!number) {
-addLog("Digite ou gere um número de 8 dígitos.", "error");
-return;
-}
-if (!/^\d{8}$/.test(number)) { addLog("Formato inválido (exatamente 8 dígitos).", "error"); return; } if (myRegisteredNumber === number && peer && !peer.destroyed) { addLog(Você já está registrado como ${number}.`, "info");
-return;
-}
-await registerNumber(number);
-});
+        // ---------- EVENTOS UI ----------
+        callBtn.onclick = () => makeCall(remotePeerIdVoip.value.trim());
+        hangupBtn.onclick = endCall;
+        muteBtn.onclick = () => { if(isCallActive) toggleMute(); };
+        volumeSlider.oninput = (e) => { remoteAudio.volume = e.target.value/100; };
+        copyIdBtn.onclick = () => { navigator.clipboard.writeText(immutableId); copyIdBtn.innerHTML = '<i class="fas fa-check"></i> OK'; setTimeout(() => copyIdBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar', 1500); };
+        reconnectBtn.onclick = () => { initPeer(); peerStatusSpan.innerHTML = '🔄 Reconectando...'; peerStatusSpan.style.color = '#facc15'; if(currentCall) endCall(); closeDataConnection(); };
+        document.getElementById('saveNicknameBtn').onclick = () => { let newName = document.getElementById('nicknameInput').value.trim(); if(newName) currentNickname = setNickname(newName); if(dataConnection?.open) dataConnection.send({ type: 'system', info: `nickname:${currentNickname}` }); };
+        document.getElementById('addContactBtn').onclick = () => { let name = document.getElementById('newContactName').value.trim(); let id = document.getElementById('newContactId').value.trim(); if(addContact(name, id)) { document.getElementById('newContactName').value = ''; document.getElementById('newContactId').value = ''; alert("Contato adicionado!"); } else alert("Preencha ambos ou contato duplicado."); };
+        sendMsgBtn.onclick = sendChatMessage;
+        chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendChatMessage(); else sendTyping(); };
 
-callBtn.addEventListener('click', () => {
-if (!myRegisteredNumber || !peer) {
-addLog("Registre seu número primeiro.", "error");
-return;
-}
-const target = targetNumberInput.value.trim();
-if (!target) {
-addLog("Informe o número destino.", "error");
-return;
-}
-makeCall(target);
-});
+        // Inicialização
+        loadContacts();
+        initPeer();
+        setCallUICleanup();
 
-hangupBtn.addEventListener('click', hangupCall);
-muteMicBtn.addEventListener('click', toggleMute);
-acceptCallBtn.addEventListener('click', acceptIncoming);
-rejectCallBtn.addEventListener('click', rejectIncoming);
-
-// Sanitização dos inputs
-[myNumberInput, targetNumberInput].forEach(inp => {
-inp.addEventListener('input', (e) => {
-e.target.value = e.target.value.replace(/\D/g, '').slice(0,8);
-});
-});
-
-addLog("✅ Sistema VoIP carregado. Clique em 'Registrar' com seu número de 8 dígitos.", "success");
-addLog("💡 Se o número estiver ocupado, o sistema encontrará um automaticamente.", "info");
+        // Limpeza final
+        window.addEventListener('beforeunload', () => { if(localStream) localStream.getTracks().forEach(t=>t.stop()); if(currentCall) currentCall.close(); if(dataConnection) dataConnection.close(); if(peer && !peer.destroyed) peer.destroy(); });
+    })();
 </script>
 </body>
 </html>
