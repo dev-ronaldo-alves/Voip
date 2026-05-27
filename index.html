@@ -3,56 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
-    <title>VoIP + Chat - Permissão de Microfone (Chrome)</title>
+    <title>VoIP + Chat + Contatos - Interface em Abas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); min-height: 100vh; padding: 12px; }
-        .app-container { max-width: 100%; background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(12px); border-radius: 32px; border: 1px solid rgba(255, 255, 255, 0.15); overflow: hidden; }
-        .card { background: rgba(0, 0, 0, 0.25); border-radius: 28px; margin: 12px; padding: 16px; border: 1px solid rgba(255, 255, 255, 0.08); }
-        .card-title { font-size: 1.1rem; font-weight: 600; color: #e2e8f0; margin-bottom: 14px; display: flex; align-items: center; gap: 10px; border-left: 3px solid #60a5fa; padding-left: 12px; }
-        .header { background: rgba(0, 0, 0, 0.3); padding: 16px 20px; text-align: center; }
-        .header h1 { font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.5rem; background: linear-gradient(120deg, #c084fc, #60a5fa); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        .profile-box, .mic-permission-box { background: rgba(0, 0, 0, 0.35); border-radius: 24px; padding: 14px; margin-bottom: 12px; }
-        .peer-id-box { display: flex; align-items: center; justify-content: space-between; background: #0f172a; border-radius: 50px; padding: 8px 12px; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .peer-id-box span { font-family: monospace; font-size: 0.75rem; word-break: break-all; color: #e2e8f0; flex: 1; }
-        .copy-btn, .reconnect-peer, .request-mic-btn { background: #334155; border: none; padding: 6px 12px; border-radius: 40px; color: white; font-size: 0.7rem; cursor: pointer; }
-        .request-mic-btn { background: #f59e0b; width: 100%; padding: 12px; font-size: 0.9rem; margin-top: 8px; }
-        .nickname-area { display: flex; gap: 10px; background: #0f172a; border-radius: 50px; padding: 6px 12px; }
-        .nickname-area input { flex: 1; background: transparent; border: none; color: white; font-size: 0.9rem; outline: none; }
-        .nickname-area button { background: #3b82f6; border: none; padding: 6px 14px; border-radius: 40px; color: white; }
-        .call-row { display: flex; gap: 10px; margin: 12px 0; }
-        .call-row input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 60px; color: white; }
-        .action-buttons { display: flex; gap: 10px; }
-        .btn-call, .btn-hangup, .btn-mute { flex: 1; padding: 12px; border-radius: 60px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; border: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 12px;
+        }
+
+        .app-container {
+            max-width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header com perfil e botões de navegação */
+        .header {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .peer-info {
+            background: #0f172a;
+            border-radius: 50px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .peer-info span {
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #e2e8f0;
+            word-break: break-all;
+            flex: 1;
+        }
+
+        .peer-info button {
+            background: #334155;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.65rem;
+        }
+
+        .nickname-area {
+            background: #0f172a;
+            border-radius: 50px;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nickname-area input {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 0.8rem;
+            outline: none;
+            width: 100px;
+        }
+
+        .nickname-area button {
+            background: #3b82f6;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.65rem;
+        }
+
+        /* Botões redondos de navegação (3 abas) */
+        .nav-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 8px;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-btn i {
+            font-size: 1.6rem;
+        }
+
+        .nav-btn.active {
+            background: #10b981;
+            color: white;
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+        }
+
+        /* Conteúdo das abas */
+        .tab-content {
+            display: none;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards internos */
+        .card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 28px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 3px solid #60a5fa;
+            padding-left: 10px;
+        }
+
+        /* Chamada */
+        .call-row {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .call-row input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-call, .btn-hangup, .btn-mute {
+            flex: 1;
+            padding: 12px;
+            border-radius: 60px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border: none;
+        }
         .btn-call { background: #10b981; color: white; }
         .btn-hangup { background: #dc2626; color: white; }
         .btn-mute { background: #334155; color: white; }
         .btn-mute.active { background: #f59e0b; }
-        .status-area { background: rgba(0,0,0,0.3); border-radius: 20px; padding: 12px; margin-top: 12px; }
+        .status-area {
+            background: rgba(0,0,0,0.3);
+            border-radius: 20px;
+            padding: 12px;
+            margin-top: 12px;
+        }
         .timer { font-family: monospace; font-size: 1.1rem; color: #facc15; }
-        .contacts-list { max-height: 250px; overflow-y: auto; margin-bottom: 12px; }
-        .contact-item { background: #0f172a; border-radius: 60px; padding: 10px 16px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+        /* Contatos */
+        .contacts-list {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 12px;
+        }
+        .contact-item {
+            background: #0f172a;
+            border-radius: 60px;
+            padding: 10px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
         .contact-name { font-weight: 600; color: white; font-size: 0.9rem; }
         .contact-id { font-size: 0.65rem; font-family: monospace; color: #94a3b8; }
         .contact-actions { display: flex; gap: 8px; }
-        .contact-actions button { background: #334155; border: none; padding: 6px 12px; border-radius: 40px; color: white; font-size: 0.7rem; cursor: pointer; }
+        .contact-actions button {
+            background: #334155;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.7rem;
+            cursor: pointer;
+        }
         .contact-actions .call-contact { background: #10b981; }
         .contact-actions .chat-contact { background: #3b82f6; }
-        .add-contact-form { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
-        .add-contact-form input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 10px 14px; border-radius: 60px; color: white; }
-        .add-contact-form button { background: #10b981; border: none; padding: 0 18px; border-radius: 60px; color: white; font-weight: bold; }
-        .chat-messages { height: 35vh; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 10px; background: rgba(0,0,0,0.2); border-radius: 24px; margin-bottom: 10px; }
-        .message { max-width: 85%; padding: 8px 12px; border-radius: 20px; font-size: 0.85rem; }
+        .add-contact-form {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+        .add-contact-form input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 10px 14px;
+            border-radius: 60px;
+            color: white;
+        }
+        .add-contact-form button {
+            background: #10b981;
+            border: none;
+            padding: 0 18px;
+            border-radius: 60px;
+            color: white;
+        }
+
+        /* Chat */
+        .chat-messages {
+            height: 40vh;
+            overflow-y: auto;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 24px;
+            margin-bottom: 10px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
         .message.sent { align-self: flex-end; background: #10b981; color: white; }
         .message.received { align-self: flex-start; background: #334155; color: white; }
-        .chat-input-area { display: flex; gap: 10px; }
-        .chat-input-area input { flex: 1; background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 60px; color: white; }
-        .chat-input-area button { background: #60a5fa; border: none; padding: 0 18px; border-radius: 60px; color: white; }
-        .peer-status, .mic-status, .security-warning { font-size: 0.7rem; margin-top: 8px; text-align: center; }
-        .security-warning { background: #dc262620; padding: 8px; border-radius: 12px; color: #fca5a5; }
-        .footer-note { font-size: 0.6rem; text-align: center; padding: 12px; color: #64748b; }
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input-area input {
+            flex: 1;
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 12px;
+            border-radius: 60px;
+            color: white;
+        }
+        .chat-input-area button {
+            background: #60a5fa;
+            border: none;
+            padding: 0 18px;
+            border-radius: 60px;
+            color: white;
+        }
+        .chat-remote-status {
+            font-size: 0.7rem;
+            text-align: center;
+            margin: 8px 0;
+            color: #94a3b8;
+        }
+
+        .mic-status {
+            font-size: 0.7rem;
+            margin-top: 8px;
+            text-align: center;
+        }
+
+        .peer-status {
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 6px;
+            color: #94a3b8;
+        }
+
+        .request-mic-btn {
+            background: #f59e0b;
+            border: none;
+            padding: 8px;
+            border-radius: 40px;
+            color: white;
+            font-size: 0.75rem;
+            width: 100%;
+            margin-top: 8px;
+        }
+
+        .footer-note {
+            font-size: 0.6rem;
+            text-align: center;
+            padding: 12px;
+            color: #64748b;
+        }
         #remoteAudio { display: none; }
         button { cursor: pointer; touch-action: manipulation; }
         input, textarea { font-size: 16px !important; }
@@ -60,43 +352,42 @@
 </head>
 <body>
 <div class="app-container">
+    <!-- Header com perfil e botões de navegação -->
     <div class="header">
-        <h1><i class="fas fa-phone-alt"></i> <i class="fas fa-comments"></i> VoIP + Chat</h1>
-        <p>Chamadas seguras | Necessário HTTPS e permissão de microfone</p>
-    </div>
-
-    <div class="sections">
-        <!-- Aviso de segurança (HTTPS) -->
-        <div id="securityWarning" class="security-warning" style="display: none;"></div>
-
-        <!-- Perfil local -->
-        <div class="card">
-            <div class="card-title"><i class="fas fa-user-circle"></i> Meu perfil</div>
-            <div class="profile-box">
-                <div class="peer-id-box">
-                    <span id="myImmutableId">Gerando ID...</span>
-                    <div>
-                        <button id="copyIdBtn" class="copy-btn"><i class="fas fa-copy"></i> Copiar</button>
-                        <button id="reconnectPeerBtn" class="reconnect-peer"><i class="fas fa-sync-alt"></i> Recarregar Peer</button>
-                    </div>
-                </div>
-                <div class="nickname-area">
-                    <input type="text" id="nicknameInput" placeholder="Seu nome mutável" maxlength="30">
-                    <button id="saveNicknameBtn">Salvar</button>
-                </div>
-                <div id="peerConnectionStatus" class="peer-status">🟡 Inicializando...</div>
+        <div class="profile-row">
+            <div class="peer-info">
+                <i class="fas fa-id-card" style="color:#60a5fa;"></i>
+                <span id="myImmutableId">Carregando...</span>
+                <button id="copyIdBtn"><i class="fas fa-copy"></i> Copiar</button>
             </div>
-
-            <!-- Permissão de microfone - componente dedicado -->
-            <div class="mic-permission-box">
-                <div class="card-title" style="margin-bottom: 8px;"><i class="fas fa-microphone"></i> Permissão de áudio</div>
-                <div id="micStatus" class="mic-status">🔴 Permissão não concedida</div>
-                <button id="requestMicBtn" class="request-mic-btn"><i class="fas fa-microphone"></i> Permitir Microfone</button>
-                <div style="font-size: 0.7rem; color:#94a3b8; margin-top: 8px;">Necessário para fazer/receber chamadas</div>
+            <div class="nickname-area">
+                <input type="text" id="nicknameInput" placeholder="Nome">
+                <button id="saveNicknameBtn">Salvar</button>
             </div>
         </div>
+        <div id="peerConnectionStatus" class="peer-status">🟡 Conectando ao servidor...</div>
+        <div id="micStatus" class="mic-status">🔴 Microfone: não permitido</div>
+        <button id="requestMicBtn" class="request-mic-btn"><i class="fas fa-microphone"></i> Permitir Microfone</button>
 
-        <!-- Chamada VoIP -->
+        <!-- Botões redondos de navegação -->
+        <div class="nav-buttons">
+            <button class="nav-btn" data-tab="call">
+                <i class="fas fa-phone-alt"></i>
+                <span>Chamada</span>
+            </button>
+            <button class="nav-btn" data-tab="chat">
+                <i class="fas fa-comment-dots"></i>
+                <span>Chat</span>
+            </button>
+            <button class="nav-btn" data-tab="contacts">
+                <i class="fas fa-address-book"></i>
+                <span>Contatos</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Aba: Chamada VoIP -->
+    <div id="tab-call" class="tab-content">
         <div class="card">
             <div class="card-title"><i class="fas fa-phone-alt"></i> Chamada de voz</div>
             <div class="call-row">
@@ -119,8 +410,31 @@
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Contatos -->
+    <!-- Aba: Chat -->
+    <div id="tab-chat" class="tab-content">
+        <div class="card">
+            <div class="card-title"><i class="fas fa-comment-dots"></i> Bate-papo</div>
+            <div class="chat-remote-status" id="chatRemoteStatus">🔴 Nenhum chat conectado</div>
+            <div id="chatMessages" class="chat-messages">
+                <div class="message received" style="opacity:0.7;">Conecte-se a um contato para conversar</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
+                <button id="sendMsgBtn"><i class="fas fa-paper-plane"></i> Enviar</button>
+            </div>
+            <div id="typingIndicator" style="font-size:0.7rem; color:#94a3b8; margin-top:6px;"></div>
+            <div style="margin-top: 12px;">
+                <input type="text" id="remotePeerIdChat" placeholder="ID do contato para conectar chat" style="width:100%; padding:10px; border-radius:60px; background:#0f172a; border:1px solid #334155; color:white; margin-bottom:8px;">
+                <button id="connectChatBtn" style="width:100%; background:#3b82f6; border:none; padding:10px; border-radius:60px; color:white;">Conectar Chat</button>
+                <button id="disconnectChatBtn" style="width:100%; margin-top:8px; background:#ef4444; border:none; padding:10px; border-radius:60px; color:white;">Desconectar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Aba: Contatos -->
+    <div id="tab-contacts" class="tab-content">
         <div class="card">
             <div class="card-title"><i class="fas fa-address-book"></i> Meus Contatos</div>
             <div id="contactsList" class="contacts-list"><div style="color:#94a3b8; text-align:center; padding:20px;">Carregando...</div></div>
@@ -130,38 +444,14 @@
                 <button id="addContactBtn"><i class="fas fa-plus"></i> Adicionar</button>
             </div>
         </div>
-
-        <!-- Chat -->
-        <div class="card">
-            <div class="card-title"><i class="fas fa-comment-dots"></i> Bate-papo</div>
-            <div class="chat-remote-status" id="chatRemoteStatus">🔴 Nenhum chat conectado</div>
-            <div id="chatMessages" class="chat-messages"><div class="message received" style="opacity:0.7;">Conecte-se a um contato para conversar</div></div>
-            <div class="chat-input-area">
-                <input type="text" id="chatInput" placeholder="Digite uma mensagem...">
-                <button id="sendMsgBtn"><i class="fas fa-paper-plane"></i> Enviar</button>
-            </div>
-            <div id="typingIndicator" style="font-size:0.7rem; color:#94a3b8; margin-top:6px;"></div>
-        </div>
     </div>
-    <div class="footer-note">ID imutável salvo localmente | Permissão de microfone exigida pelo Chrome (HTTPS)</div>
+
+    <div class="footer-note">ID imutável salvo localmente | Permissão de microfone necessária para chamadas</div>
 </div>
 <audio id="remoteAudio" autoplay></audio>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
 <script>
     (function() {
-        // ---------- VERIFICAÇÃO DE CONTEXTO SEGURO (HTTPS ou localhost) ----------
-        function isSecureContext() {
-            return location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-        }
-
-        const securityWarningDiv = document.getElementById('securityWarning');
-        if (!isSecureContext()) {
-            securityWarningDiv.style.display = 'block';
-            securityWarningDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ATENÇÃO: O Chrome exige HTTPS ou localhost para acessar o microfone. Você está em ambiente não seguro. Para testar, use https:// ou execute localmente.';
-        } else {
-            securityWarningDiv.style.display = 'none';
-        }
-
         // ---------- STORAGE ----------
         const STORAGE_IMMUTABLE_ID = 'voipapp_immutable_id';
         const STORAGE_NICKNAME = 'voipapp_nickname';
@@ -227,20 +517,35 @@
                         <div class="contact-id">${escapeHtml(c.id.substring(0,12))}...</div>
                     </div>
                     <div class="contact-actions">
-                        <button class="call-contact" data-idx="${idx}"><i class="fas fa-phone"></i></button>
-                        <button class="chat-contact" data-idx="${idx}"><i class="fas fa-comment"></i></button>
-                        <button class="edit-contact" data-idx="${idx}"><i class="fas fa-edit"></i></button>
-                        <button class="delete-contact" data-idx="${idx}"><i class="fas fa-trash"></i></button>
+                        <button class="call-contact" data-idx="${idx}" title="Chamar"><i class="fas fa-phone"></i></button>
+                        <button class="chat-contact" data-idx="${idx}" title="Conversar"><i class="fas fa-comment"></i></button>
+                        <button class="edit-contact" data-idx="${idx}" title="Editar"><i class="fas fa-edit"></i></button>
+                        <button class="delete-contact" data-idx="${idx}" title="Excluir"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
             `).join('');
-            document.querySelectorAll('.call-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) { document.getElementById('remotePeerIdVoip').value = c.id; makeCall(c.id); } });
-            document.querySelectorAll('.chat-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) connectChat(c.id); });
+            document.querySelectorAll('.call-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) { document.getElementById('remotePeerIdVoip').value = c.id; switchTab('call'); makeCall(c.id); } });
+            document.querySelectorAll('.chat-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; if(c) { switchTab('chat'); document.getElementById('remotePeerIdChat').value = c.id; connectChat(c.id); } });
             document.querySelectorAll('.edit-contact').forEach(btn => btn.onclick = () => { let c = contacts[btn.dataset.idx]; let n = prompt("Novo nome:", c.name); if(n?.trim()) updateContact(btn.dataset.idx, n, prompt("Novo ID:", c.id) || c.id); });
             document.querySelectorAll('.delete-contact').forEach(btn => btn.onclick = () => { if(confirm("Remover?")) deleteContact(btn.dataset.idx); });
         }
 
-        // ---------- ELEMENTOS DOM ----------
+        // ---------- GERENCIAMENTO DE ABAS ----------
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.tab === tabId) btn.classList.add('active');
+                else btn.classList.remove('active');
+            });
+        }
+
+        document.querySelectorAll('.nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+        switchTab('call'); // aba inicial
+
+        // ---------- ELEMENTOS COMUNS ----------
         const remotePeerIdVoip = document.getElementById('remotePeerIdVoip');
         const callBtn = document.getElementById('callBtn');
         const hangupBtn = document.getElementById('hangupBtn');
@@ -250,7 +555,6 @@
         const volumeSlider = document.getElementById('volumeSlider');
         const remoteAudio = document.getElementById('remoteAudio');
         const copyIdBtn = document.getElementById('copyIdBtn');
-        const reconnectBtn = document.getElementById('reconnectPeerBtn');
         const requestMicBtn = document.getElementById('requestMicBtn');
         const micStatusSpan = document.getElementById('micStatus');
         const peerStatusSpan = document.getElementById('peerConnectionStatus');
@@ -259,6 +563,13 @@
         const sendMsgBtn = document.getElementById('sendMsgBtn');
         const chatRemoteStatusSpan = document.getElementById('chatRemoteStatus');
         const typingIndicatorDiv = document.getElementById('typingIndicator');
+        const remotePeerIdChat = document.getElementById('remotePeerIdChat');
+        const connectChatBtn = document.getElementById('connectChatBtn');
+        const disconnectChatBtn = document.getElementById('disconnectChatBtn');
+        const saveNicknameBtn = document.getElementById('saveNicknameBtn');
+        const addContactBtn = document.getElementById('addContactBtn');
+        const newContactName = document.getElementById('newContactName');
+        const newContactId = document.getElementById('newContactId');
 
         // ---------- VARIÁVEIS GLOBAIS ----------
         let peer = null;
@@ -272,93 +583,43 @@
         let currentChatPeerId = null;
         let typingTimeout = null;
 
-        // ---------- GERENCIAMENTO DE PERMISSÃO DE MICROFONE (COM TRATAMENTO ESPECÍFICO PARA CHROME) ----------
+        // ---------- PERMISSÃO MICROFONE ----------
         async function checkMicPermission() {
-            if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-                micStatusSpan.innerHTML = '⚠️ API de mídia não suportada pelo navegador.';
-                return false;
-            }
+            if (!navigator.mediaDevices) { micStatusSpan.innerHTML = '⚠️ API não suportada'; return false; }
             try {
-                const devices = await navigator.mediaDevices.enumerateDevices();
-                const hasAudioInput = devices.some(d => d.kind === 'audioinput');
-                if (!hasAudioInput) {
-                    micStatusSpan.innerHTML = '❌ Nenhum microfone encontrado no sistema.';
-                    return false;
-                }
-                // Tenta obter stream para verificar permissão real (sem pedir novamente)
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 stream.getTracks().forEach(t => t.stop());
                 micStatusSpan.innerHTML = '✅ Microfone liberado';
                 return true;
-            } catch (err) {
-                console.error("Erro ao verificar permissão:", err);
-                if (err.name === 'NotAllowedError') {
-                    micStatusSpan.innerHTML = '🔴 Permissão negada. Clique no botão abaixo para solicitar.';
-                } else if (err.name === 'NotFoundError') {
-                    micStatusSpan.innerHTML = '❌ Nenhum microfone detectado.';
-                } else {
-                    micStatusSpan.innerHTML = `⚠️ Erro: ${err.message}`;
-                }
+            } catch(err) {
+                micStatusSpan.innerHTML = '🔴 Permissão negada. Clique no botão.';
                 return false;
             }
         }
-
         async function requestMicrophonePermission() {
-            // Em ambiente não seguro, impedir a solicitação e orientar o usuário
-            if (!isSecureContext()) {
-                alert("⚠️ O Chrome exige HTTPS ou localhost para acessar o microfone.\n\nPor favor, use HTTPS ou acesse via localhost para testar chamadas.");
-                micStatusSpan.innerHTML = '🔒 Contexto não seguro. Use HTTPS ou localhost.';
-                return false;
-            }
-
-            micStatusSpan.innerHTML = '🟡 Solicitando permissão...';
+            micStatusSpan.innerHTML = '🟡 Solicitando...';
             try {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                // Se já existir stream, parar a anterior
-                if (localStream) {
-                    localStream.getTracks().forEach(t => t.stop());
-                }
+                if (localStream) localStream.getTracks().forEach(t => t.stop());
                 localStream = stream;
                 micStatusSpan.innerHTML = '✅ Microfone ativo';
                 return true;
-            } catch (err) {
-                console.error("Erro ao solicitar permissão:", err);
-                if (err.name === 'NotAllowedError') {
-                    micStatusSpan.innerHTML = '🔴 Permissão negada pelo Chrome. Clique no ícone de cadeado ao lado da URL e permita o acesso ao microfone.';
-                } else if (err.name === 'NotFoundError') {
-                    micStatusSpan.innerHTML = '❌ Nenhum microfone encontrado. Conecte um microfone e recarregue.';
-                } else {
-                    micStatusSpan.innerHTML = `❌ Falha: ${err.message}`;
-                }
+            } catch(err) {
+                micStatusSpan.innerHTML = '❌ Permissão negada. Verifique as configurações do site.';
                 return false;
             }
         }
+        requestMicBtn.onclick = requestMicrophonePermission;
+        checkMicPermission();
 
-        // Função para obter stream (garante que existe)
         async function getMicrophoneStream() {
-            if (localStream && localStream.active && localStream.getAudioTracks().length > 0) {
-                return localStream;
-            }
-            // Tenta obter novamente (pode solicitar permissão novamente)
+            if (localStream && localStream.active && localStream.getAudioTracks().length) return localStream;
             const granted = await requestMicrophonePermission();
             if (!granted) throw new Error("Microfone não disponível");
             return localStream;
         }
 
-        // Inicialização: verifica permissão sem solicitar (apenas exibe status)
-        checkMicPermission();
-
-        // Botão de solicitação explícita
-        requestMicBtn.addEventListener('click', async () => {
-            const granted = await requestMicrophonePermission();
-            if (granted) {
-                alert("✅ Microfone liberado! Agora você pode fazer e receber chamadas.");
-            } else {
-                alert("❌ Não foi possível acessar o microfone. Verifique as permissões do site.");
-            }
-        });
-
-        // ---------- FUNÇÕES VOIP (com verificação de microfone) ----------
+        // ---------- FUNÇÕES VOIP ----------
         function updateStatusUI(text, connected) { connectionStatusSpan.innerHTML = connected ? `🟢 ${text}` : `🔴 ${text}`; }
         function formatTime(s) { return `${Math.floor(s/60)}`.padStart(2,'0')+':'+`${s%60}`.padStart(2,'0'); }
         function startTimer() { if(timerInterval) clearInterval(timerInterval); callStartTime = Date.now(); timerInterval = setInterval(() => { if(isCallActive && callStartTime) callTimerSpan.textContent = formatTime(Math.floor((Date.now()-callStartTime)/1000)); else callTimerSpan.textContent = '00:00'; }, 1000); }
@@ -397,7 +658,7 @@
         async function makeCall(remoteId) {
             if(!remoteId) { alert("Digite o ID do contato."); return; }
             if(currentCall) { alert("Já em chamada."); return; }
-            if(!peer || peer.disconnected) { alert("Peer desconectado. Tente 'Recarregar Peer'."); return; }
+            if(!peer || peer.disconnected) { alert("Peer desconectado. Recarregue a página."); return; }
             try {
                 let stream = await getMicrophoneStream();
                 if (!stream) throw new Error("Sem microfone");
@@ -421,7 +682,7 @@
             }
         }
 
-        // ---------- CHAT (sem alterações) ----------
+        // ---------- CHAT ----------
         function addChatMessage(text, type, sender = '') {
             const msgDiv = document.createElement('div');
             msgDiv.className = `message ${type}`;
@@ -469,7 +730,7 @@
         function connectChat(remoteId) {
             if(!remoteId) { alert("Informe o ID."); return; }
             if(dataConnection?.open) { if(currentChatPeerId === remoteId) alert("Já conectado."); else closeDataConnection(); }
-            if(!peer || peer.disconnected) { alert("Peer offline. Recarregue o peer."); return; }
+            if(!peer || peer.disconnected) { alert("Peer offline."); return; }
             const conn = peer.connect(remoteId.trim(), { reliable: true });
             dataConnection = conn;
             setupDataEvents(conn, remoteId);
@@ -486,20 +747,14 @@
 
         function sendTyping() { if(dataConnection?.open) dataConnection.send({ type: 'typing' }); }
 
-        // ---------- PEER (com reconexão manual) ----------
-        function destroyPeer() {
-            if(peer && !peer.destroyed) peer.destroy();
-            peer = null;
-        }
-
+        // ---------- PEER ----------
         function initPeer() {
-            destroyPeer();
+            if(peer && !peer.destroyed) peer.destroy();
             const options = { host: '0.peerjs.com', port: 443, path: '/', secure: true, debug: 0 };
             peer = new Peer(immutableId, options);
             peer.on('open', (id) => {
                 document.getElementById('myImmutableId').textContent = id;
-                peerStatusSpan.innerHTML = '✅ Conectado ao servidor P2P';
-                peerStatusSpan.style.color = '#10b981';
+                peerStatusSpan.innerHTML = '✅ Conectado ao servidor';
                 updateStatusUI("Conectado", true);
             });
             peer.on('call', async (incoming) => {
@@ -516,19 +771,8 @@
                 } catch(e) { incoming.close(); alert("Não foi possível atender: microfone indisponível."); }
             });
             peer.on('connection', onIncomingData);
-            peer.on('error', (err) => {
-                console.error(err);
-                if(err.type === 'unavailable-id') peerStatusSpan.innerHTML = '❌ ID conflitante! Recarregue a página.';
-                else if(err.type === 'peer-unavailable') updateChatStatus(false);
-                else peerStatusSpan.innerHTML = '⚠️ Erro no peer. Clique em "Recarregar Peer".';
-                peerStatusSpan.style.color = '#ef4444';
-                updateStatusUI("Erro", false);
-            });
-            peer.on('disconnected', () => {
-                peerStatusSpan.innerHTML = '🟡 Desconectado, clique em Recarregar Peer';
-                peerStatusSpan.style.color = '#f59e0b';
-                updateStatusUI("Desconectado", false);
-            });
+            peer.on('error', (err) => { console.error(err); peerStatusSpan.innerHTML = '⚠️ Erro no peer'; updateStatusUI("Erro", false); });
+            peer.on('disconnected', () => { peerStatusSpan.innerHTML = '🟡 Desconectado'; updateStatusUI("Desconectado", false); });
             peer.on('close', () => { if(currentCall) endCall(); });
         }
 
@@ -537,19 +781,18 @@
         hangupBtn.onclick = endCall;
         muteBtn.onclick = () => { if(isCallActive) toggleMute(); };
         volumeSlider.oninput = (e) => { remoteAudio.volume = e.target.value/100; };
-        copyIdBtn.onclick = () => { navigator.clipboard.writeText(immutableId); copyIdBtn.innerHTML = '<i class="fas fa-check"></i> OK'; setTimeout(() => copyIdBtn.innerHTML = '<i class="fas fa-copy"></i> Copiar', 1500); };
-        reconnectBtn.onclick = () => { initPeer(); peerStatusSpan.innerHTML = '🔄 Reconectando...'; peerStatusSpan.style.color = '#facc15'; if(currentCall) endCall(); closeDataConnection(); };
-        document.getElementById('saveNicknameBtn').onclick = () => { let newName = document.getElementById('nicknameInput').value.trim(); if(newName) currentNickname = setNickname(newName); if(dataConnection?.open) dataConnection.send({ type: 'system', info: `nickname:${currentNickname}` }); };
-        document.getElementById('addContactBtn').onclick = () => { let name = document.getElementById('newContactName').value.trim(); let id = document.getElementById('newContactId').value.trim(); if(addContact(name, id)) { document.getElementById('newContactName').value = ''; document.getElementById('newContactId').value = ''; alert("Contato adicionado!"); } else alert("Preencha ambos ou contato duplicado."); };
+        copyIdBtn.onclick = () => { navigator.clipboard.writeText(immutableId); copyIdBtn.innerHTML = '<i class="fas fa-check"></i>'; setTimeout(() => copyIdBtn.innerHTML = '<i class="fas fa-copy"></i>', 1500); };
+        saveNicknameBtn.onclick = () => { let newName = document.getElementById('nicknameInput').value.trim(); if(newName) { currentNickname = setNickname(newName); if(dataConnection?.open) dataConnection.send({ type: 'system', info: `nickname:${currentNickname}` }); } };
+        addContactBtn.onclick = () => { let name = newContactName.value.trim(); let id = newContactId.value.trim(); if(addContact(name, id)) { newContactName.value = ''; newContactId.value = ''; alert("Contato adicionado!"); } else alert("Preencha ambos ou contato duplicado."); };
         sendMsgBtn.onclick = sendChatMessage;
         chatInput.onkeypress = (e) => { if(e.key === 'Enter') sendChatMessage(); else sendTyping(); };
+        connectChatBtn.onclick = () => connectChat(remotePeerIdChat.value.trim());
+        disconnectChatBtn.onclick = () => { closeDataConnection(); addChatMessage("Você desconectou o chat.", 'received', 'Sistema'); };
 
         // Inicialização
         loadContacts();
         initPeer();
         setCallUICleanup();
-
-        // Limpeza final
         window.addEventListener('beforeunload', () => { if(localStream) localStream.getTracks().forEach(t=>t.stop()); if(currentCall) currentCall.close(); if(dataConnection) dataConnection.close(); if(peer && !peer.destroyed) peer.destroy(); });
     })();
 </script>
